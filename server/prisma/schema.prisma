@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  userId    String?  // Optional user identifier (hashed)
+  isActive  Boolean  @default(true)
+  
+  // Audit trail
+  refillEvents      RefillEvent[]
+  interactionChecks InteractionCheck[]
+  auditLogs         AuditLog[]
+}
+
+model RefillEvent {
+  id          String   @id @default(uuid())
+  sessionId   String
+  session     Session  @relation(fields: [sessionId], references: [id])
+  
+  // Patient info (hashed/redacted for privacy)
+  patientNameHash String
+  dobHash         String
+  phoneLastFour   String?
+  
+  // Prescription details
+  medicationName String
+  dosage         String
+  quantity       Int?
+  pharmacyLocation String
+  
+  // Status and timing
+  status         String // "placed", "no_refills", "not_found", "needs_provider"
+  etaMinutes     Int?
+  createdAt      DateTime @default(now())
+  
+  @@map("refill_events")
+}
+
+model InteractionCheck {
+  id        String   @id @default(uuid())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  
+  // Medications checked
+  medications Json // Array of medication names
+  conditions  Json // Array of conditions
+  
+  // Results
+  alerts    Json // Array of {severity, summary, guidance}
+  createdAt DateTime @default(now())
+  
+  @@map("interaction_checks")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  
+  action    String   // "refill_request", "interaction_check", "admin_advice", etc.
+  details   Json     // Redacted details of the action
+  timestamp DateTime @default(now())
+  
+  @@map("audit_logs")
+}
+
+// Mock prescription data for demo
+model MockPrescription {
+  id               String   @id @default(uuid())
+  patientNameHash  String
+  dobHash          String
+  phoneLastFour    String?
+  
+  medicationName   String
+  dosage           String
+  quantity         Int
+  refillsRemaining Int
+  prescribedDate   DateTime
+  pharmacyLocation String
+  
+  @@unique([patientNameHash, medicationName, dosage], name: "patientNameHash_medicationName_dosage")
+  @@map("mock_prescriptions")
+}

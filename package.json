@@ -1,0 +1,31 @@
+{
+  "name": "pharmacy-voice-agent",
+  "version": "1.0.0",
+  "description": "HIPAA-aware voice agent for pharmacy operations",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
+    "dev:server": "cd server && pnpm dev",
+    "dev:web": "cd web && pnpm dev",
+    "build": "pnpm build:server && pnpm build:web",
+    "build:server": "cd server && pnpm build",
+    "build:web": "cd web && pnpm build",
+    "typecheck": "pnpm typecheck:server && pnpm typecheck:web",
+    "typecheck:server": "cd server && pnpm typecheck",
+    "typecheck:web": "cd web && pnpm typecheck",
+    "lint": "pnpm lint:server && pnpm lint:web",
+    "lint:server": "cd server && pnpm lint",
+    "lint:web": "cd web && pnpm lint",
+    "migrate": "cd server && pnpm migrate",
+    "seed": "cd server && pnpm seed",
+    "test": "pnpm test:server",
+    "test:server": "cd server && pnpm test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "server",
+    "web"
+  ]
+}
