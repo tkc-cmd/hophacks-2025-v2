@@ -71,19 +71,19 @@ async function seedSampleSessions() {
     {
       sessionId: 'demo-session-1',
       action: 'session_start',
-      details: { userAgent: 'Demo Browser', timestamp: new Date().toISOString() },
+      details: JSON.stringify({ userAgent: 'Demo Browser', timestamp: new Date().toISOString() }),
       timestamp: new Date()
     },
     {
       sessionId: 'demo-session-1',
       action: 'refill_request',
-      details: { medication: '[REDACTED]', status: 'placed' },
+      details: JSON.stringify({ medication: '[REDACTED]', status: 'placed' }),
       timestamp: new Date()
     },
     {
       sessionId: 'demo-session-2',
       action: 'interaction_check',
-      details: { medicationCount: 2, alertCount: 1 },
+      details: JSON.stringify({ medicationCount: 2, alertCount: 1 }),
       timestamp: new Date()
     }
   ];

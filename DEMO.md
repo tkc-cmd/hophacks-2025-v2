@@ -4,7 +4,7 @@
 
 1. **Install dependencies**
    ```bash
-   pnpm install
+   npm install --legacy-peer-deps
    ```
 
 2. **Configure API Keys**
@@ -29,14 +29,22 @@
 3. **Initialize Database**
    ```bash
    cd server
-   DATABASE_URL="file:./dev.db" npx prisma db push
-   pnpm seed
+   npx prisma generate
+   npx prisma db push
+   npm run seed
    cd ..
    ```
 
 4. **Start the Application**
    ```bash
-   pnpm dev
+   # Option A: Start both servers (may need separate terminals)
+   npm run dev
+   
+   # Option B: Start servers separately
+   # Terminal 1:
+   cd server && npm run dev
+   # Terminal 2:
+   cd web && npm run dev
    ```
    
    This starts both the server (port 3001) and web client (port 5173).

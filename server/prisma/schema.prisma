@@ -54,11 +54,11 @@ model InteractionCheck {
   session   Session  @relation(fields: [sessionId], references: [id])
   
   // Medications checked
-  medications Json // Array of medication names
-  conditions  Json // Array of conditions
+  medications String // JSON string of medication names
+  conditions  String // JSON string of conditions
   
   // Results
-  alerts    Json // Array of {severity, summary, guidance}
+  alerts    String // JSON string of {severity, summary, guidance}
   createdAt DateTime @default(now())
   
   @@map("interaction_checks")
@@ -70,7 +70,7 @@ model AuditLog {
   session   Session  @relation(fields: [sessionId], references: [id])
   
   action    String   // "refill_request", "interaction_check", "admin_advice", etc.
-  details   Json     // Redacted details of the action
+  details   String   // JSON string of redacted details
   timestamp DateTime @default(now())
   
   @@map("audit_logs")

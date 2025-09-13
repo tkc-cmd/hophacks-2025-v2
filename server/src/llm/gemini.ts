@@ -52,7 +52,10 @@ export class GeminiClient extends EventEmitter {
     }
 
     this.genAI = new GoogleGenerativeAI(this.config.apiKey);
-    this.initializeModel();
+    // Initialize model asynchronously
+    this.initializeModel().catch(error => {
+      console.error('Failed to initialize Gemini model:', error);
+    });
   }
 
   private async initializeModel(): Promise<void> {
@@ -174,6 +177,12 @@ export class GeminiClient extends EventEmitter {
    * Start a new conversation session
    */
   startConversation(): void {
+    if (!this.model) {
+      console.warn('Gemini model not yet initialized, retrying in 1 second...');
+      setTimeout(() => this.startConversation(), 1000);
+      return;
+    }
+    
     this.chat = this.model.startChat({
       history: [
         {

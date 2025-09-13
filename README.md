@@ -51,7 +51,7 @@ A HIPAA-aware voice agent for pharmacy operations with streaming speech-to-text,
    ```bash
    git clone <repository-url>
    cd pharmacy-voice-agent
-   pnpm install
+   npm install --legacy-peer-deps
    ```
 
 2. **Set up environment variables**
@@ -69,14 +69,29 @@ A HIPAA-aware voice agent for pharmacy operations with streaming speech-to-text,
 3. **Initialize database**
    ```bash
    cd server
-   pnpm migrate
-   pnpm seed
+   npx prisma generate
+   npx prisma db push
+   npm run seed
    cd ..
    ```
 
 4. **Start development servers**
+   
+   **Option A: Start both servers together**
    ```bash
-   pnpm dev
+   # Start backend server
+   cd server && npm run dev &
+   # Start frontend server
+   cd web && npm run dev
+   ```
+   
+   **Option B: Use separate terminals**
+   ```bash
+   # Terminal 1 - Backend
+   cd server && npm run dev
+   
+   # Terminal 2 - Frontend  
+   cd web && npm run dev
    ```
 
 5. **Open your browser**
@@ -244,15 +259,27 @@ See [docs/API.md](docs/API.md) for complete WebSocket API reference.
 - Verify Web Audio API support in browser
 - Check browser audio settings
 
-**"STT not working"**
-- Verify Deepgram API key is valid
+**"STT not working / Deepgram 400 errors"**
+- Verify Deepgram API key is valid and active
+- Check your Deepgram account has sufficient credits
+- Ensure the API key has proper permissions
 - Check microphone input levels
 - Ensure clear speech (reduce background noise)
+
+**"Gemini initialization errors"**
+- Verify Google API key is valid
+- Ensure the key has Gemini API access enabled
+- Check the key hasn't exceeded rate limits
+
+**"ElevenLabs TTS not working"**
+- Verify ElevenLabs API key is active
+- Check your ElevenLabs account has sufficient characters
+- Ensure the voice ID exists and is accessible
 
 ### Debug Mode
 Enable debug logging:
 ```bash
-DEBUG_AUDIO=true pnpm dev
+DEBUG_AUDIO=true npm run dev
 ```
 
 ## 📄 License
