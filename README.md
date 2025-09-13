@@ -77,15 +77,21 @@ A HIPAA-aware voice agent for pharmacy operations with streaming speech-to-text,
 
 4. **Start development servers**
    
-   **Option A: Start both servers together**
+   **Option A: Use the demo script (Recommended)**
    ```bash
-   # Start backend server
-   cd server && npm run dev &
-   # Start frontend server
+   ./start-demo.sh
+   ```
+   
+   **Option B: Manual startup with environment variables**
+   ```bash
+   # Terminal 1 - Backend (with env vars)
+   cd server && source .env && npm run dev
+   
+   # Terminal 2 - Frontend  
    cd web && npm run dev
    ```
    
-   **Option B: Use separate terminals**
+   **Option C: Use separate terminals**
    ```bash
    # Terminal 1 - Backend
    cd server && npm run dev
@@ -275,6 +281,12 @@ See [docs/API.md](docs/API.md) for complete WebSocket API reference.
 - Verify ElevenLabs API key is active
 - Check your ElevenLabs account has sufficient characters
 - Ensure the voice ID exists and is accessible
+
+**"Environment variables not loading"**
+- Use `source .env && npm run dev` instead of just `npm run dev`
+- Or use the provided `./start-demo.sh` script
+- Verify the `.env` file is in the `server/` directory
+- Check that the `.env` file has no syntax errors
 
 ### Debug Mode
 Enable debug logging:
